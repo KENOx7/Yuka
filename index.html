@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hüceyrə Membranı Fiziologiyası və Aksiya Potensialı</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- Ümumi CSS Sıfırlama və Dəyişənlər --- */
+        :root {
+            --primary-color: #0056b3; /* Əsas mavi rəng */
+            --secondary-color: #00a86b; /* Yaşıl vurğu rəngi */
+            --bg-light: #f4f7f6;
+            --text-dark: #333;
+            --card-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            --correct-color: #28a745;
+            --wrong-color: #dc3545;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+            background-color: var(--bg-light);
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1100px;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px 0;
+        }
+
+        /* --- Header və Naviqasiya --- */
+        header {
+            background: var(--primary-color);
+            color: #fff;
+            padding: 2rem 1rem;
+            text-align: center;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        /* Yapışqan Naviqasiya (Sticky Nav) */
+        .sticky-nav {
+            position: sticky;
+            top: 0;
+            background: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 100;
+            padding: 10px 0;
+            overflow-x: auto; /* Mobildə sürüşdürmək üçün */
+            white-space: nowrap;
+        }
+
+        .sticky-nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            padding: 0 10px;
+        }
+
+        .sticky-nav li {
+            margin: 0 10px;
+        }
+
+        .sticky-nav a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .sticky-nav a:hover, .sticky-nav a.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        /* --- Məzmun Blokları (Card Style) --- */
+        .content-card {
+            background: #fff;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        h2 i {
+            margin-right: 10px;
+        }
+
+        h3 {
+            color: #444;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .mnemonic-box {
+            background-color: #e8f5e9;
+            border-left: 5px solid var(--secondary-color);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        /* --- Cədvəl Dizaynı (Responsive) --- */
+        .table-container {
+            overflow-x: auto; /* Mobildə cədvəli sürüşdürmək üçün */
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px; /* Cədvəlin minimal genişliyi */
+        }
+
+        table th, table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: center;
+        }
+
+        table th {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* --- Şəkil Yeri (Placeholder Style) --- */
+        .image-placeholder {
+            width: 100%;
+            height: 250px;
+            background-color: #e9ecef;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #6c757d;
+            border-radius: 10px;
+            border: 2px dashed #ced4da;
+            margin: 20px 0;
+        }
+        .image-placeholder i { font-size: 3rem; margin-bottom: 10px; }
+        .image-caption { text-align: center; font-style: italic; color: #666; font-size: 0.9rem; }
+
+        /* --- Akkordeon (Interactive Sections) --- */
+        .accordion {
+            background-color: #fff;
+            color: #444;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 1.1rem;
+            transition: 0.4s;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .active-acc, .accordion:hover {
+            background-color: #f1f1f1;
+            color: var(--primary-color);
+        }
+
+        .panel {
+            padding: 0 18px;
+            background-color: white;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            border-bottom: 1px solid transparent;
+        }
+        
+        .panel.show {
+             padding: 20px 18px;
+             border-bottom: 1px solid #ddd;
+        }
+
+        .accordion:after {
+            content: '\002B'; /* Plus işarəsi */
+            color: #777;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+        }
+
+        .active-acc:after {
+            content: "\2212"; /* Minus işarəsi */
+        }
+
+        /* --- Quiz Bölməsi --- */
+        .quiz-question {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .quiz-options button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s;
+        }
+
+        .quiz-options button:hover { background-color: #f0f0f0; }
+        .quiz-options button.correct { background-color: var(--correct-color); color: white; border-color: var(--correct-color); }
+        .quiz-options button.wrong { background-color: var(--wrong-color); color: white; border-color: var(--wrong-color); }
+        .quiz-feedback { margin-top: 10px; font-weight: bold; }
+
+        /* --- Flashcards (Öyrənmə Kartları) --- */
+        .flashcard-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .flashcard {
+            width: 300px;
+            height: 200px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .flashcard-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            box-shadow: var(--card-shadow);
+            border-radius: 10px;
+        }
+
+        .flashcard.flipped .flashcard-inner {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard-front, .flashcard-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border-radius: 10px;
+            flex-direction: column;
+        }
+
+        .flashcard-front {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .flashcard-front i { font-size: 2rem; margin-bottom: 10px; opacity: 0.7;}
+
+        .flashcard-back {
+            background-color: white;
+            color: var(--text-dark);
+            transform: rotateY(180deg);
+            border: 2px solid var(--primary-color);
+        }
+
+        /* --- Footer --- */
+        footer {
+            text-align: center;
+            padding: 30px;
+            margin-top: 30px;
+            background: #333;
+            color: white;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+        .next-lesson-btn {
+            display: inline-block;
+            background: var(--secondary-color);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: background 0.3s;
+        }
+        .next-lesson-btn:hover { background: #008c58; }
+
+        /* --- Mobil Uyğunluq (Media Queries) --- */
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.5rem; }
+            .content-card { padding: 15px; }
+            h2 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1><i class="fas fa-brain"></i> Hüceyrə Membranı Fiziologiyası və Aksiya Potensialı</h1>
+        <p>Neyronların "gizli dili"ni öyrənmək üçün ən əhatəli bələdçi.</p>
+    </header>
+
+    <nav class="sticky-nav">
+        <ul>
+            <li><a href="#intro">Giriş & İonlar</a></li>
+            <li><a href="#mechanisms">Mexanizmlər</a></li>
+            <li><a href="#actionpotential">Aksiya Potensialı</a></li>
+            <li><a href="#rules">Qaydalar</a></li>
+            <li><a href="#clinic">Klinika (MS)</a></li>
+            <li><a href="#quiz-section">Kviz</a></li>
+            <li><a href="#flashcards-section">Kartlar</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+
+        <section id="intro" class="content-card">
+            <h2><i class="fas fa-battery-half"></i> I. Təməl: İonların "Döyüşü"</h2>
+            <p>Hüceyrə membranı sakit vəziyyətdə (sükunət halında) elektrik yüklü bir batareya kimidir. Bu yük fərqini yaradan əsas səbəb ionların içəridə və çöldə qeyri-bərabər paylanmasıdır.</p>
+            
+            <div class="image-placeholder">
+                <i class="fas fa-image"></i>
+                <span>Şəkil: Hüceyrə membranında ion paylanması</span>
+            </div>
+            <p class="image-caption">Hüceyrə daxili və xarici mühit arasındakı yük fərqi.</p>
+
+            <div class="mnemonic-box">
+                <strong><i class="far fa-lightbulb"></i> Yadda Saxla (Mnemonika):</strong> Hüceyrəni duzlu suda üzən bir banan kimi düşünün!
+                <ul>
+                    <li>**Bananın içi (Hüceyrə içi):** Kalium (K+) ilə doludur.</li>
+                    <li>**Bananın çölü (Hüceyrə xarici):** Duzlu sudur, yəni Natrium (Na+) və Xlor (Cl-) ilə zəngindir.</li>
+                </ul>
+            </div>
+
+            <h3>📊 İonların Konsentrasiya Cədvəli (Spinal Motor Neyron):</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>İyon</th>
+                            <th>Hüceyrə İçi (mM)</th>
+                            <th>Hüceyrə Xarici (mM)</th>
+                            <th>Nernst Potensialı</th>
+                            <th>Məna</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Letium (Na⁺)</td>
+                            <td>15</td>
+                            <td><span class="highlight">150 (Çox)</span></td>
+                            <td>+61.5 mV</td>
+                            <td>Hüceyrəyə girmək üçün "çırpınır".</td>
+                        </tr>
+                        <tr>
+                            <td>Kalium (K⁺)</td>
+                            <td><span class="highlight">150 (Çox)</span></td>
+                            <td>5.5</td>
+                            <td>-94 mV</td>
+                            <td>Sükunət potensialını yaradan əsas güc.</td>
+                        </tr>
+                        <tr>
+                            <td>Xlor (Cl⁻)</td>
+                            <td>9</td>
+                            <td><span class="highlight">125 (Çox)</span></td>
+                            <td>-70 mV</td>
+                            <td>Balanslaşdırıcı mənfi yük.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p><em>*Nernst Potensialı: Bir ionun net difüziyasını dayandıracaq elektrik potensial fərqidir.</em></p>
+        </section>
+
+        <section id="mechanisms" class="content-card">
+            <h2><i class="fas fa-door-open"></i> II. Qapıçı Mexanizmlər</h2>
+            <p>Membran potensialını kim idarə edir?</p>
+            <ul>
+                <li><strong>1. Seçici Keçiricilik (Sızıntı Kanalları):</strong> Membran sükunət halında K⁺ ionlarına qarşı Na⁺-dan 100 qat daha keçiricidir. Buna görə sükunət potensialı K⁺ tarazlığına yaxındır.</li>
+                <li><strong>2. Na⁺-K⁺ Pompası (Gömrük Məmuru):</strong> Enerji (ATP) xərcləyərək <span class="highlight">3 Na⁺ çölə atır, 2 K⁺ içəri alır</span>. İon fərqini qoruyur.</li>
+                <li><strong>3. Gibbs-Donnan Tarazlığı:</strong> Hüceyrə içindəki iri, mənfi yüklü zülallar (A⁻) çölə çıxa bilmir.</li>
+            </ul>
+        </section>
+
+        <section id="actionpotential" class="content-card">
+            <h2><i class="fas fa-bolt"></i> III. Şou Başlayır: Aksiya Potensialı (AP) Evrələri</h2>
+            <p>Aksiya potensialı "Ya Hep, Ya Hiç" qanunu ilə işləyən ani bir elektrik partlamasıdır. Evrələri görmək üçün aşağıdakı başlıqlara klikləyin:</p>
+
+            <div class="image-placeholder" style="height: 200px;">
+                <i class="fas fa-chart-line"></i>
+                <span>Şəkil: Aksiya Potensialı Qrafiki</span>
+            </div>
+
+            <button class="accordion">1. Sükunət (Dinlənmə) Halı</button>
+            <div class="panel">
+                <ul>
+                    <li><strong>Potensial:</strong> Təxminən -70 mV.</li>
+                    <li><strong>Vəziyyət:</strong> Voltaj qapıları bağlıdır. K+ sızıntısı və Na-K pompası aktivdir. Hüceyrə xəbər gözləyir.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">2. Depolyarizasiya (Yüksəliş) 💥</button>
+            <div class="panel">
+                <ul>
+                    <li>Uyaran gəlir və eşik dəyər (-55 mV) keçilir.</li>
+                    <li><strong>Partlayış:</strong> Voltaj-qapılı Na⁺ kanalları açılır.</li>
+                    <li>Natrium hüceyrə içinə axır və içərini müsbət yükləyir (+30 mV-a qədər). Bu <strong>Hodgkin Dövrəsi</strong> (pozitiv geri əlaqə) adlanır.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">3. Repolyarizasiya (Düşüş)</button>
+            <div class="panel">
+                <ul>
+                    <li>Na⁺ qapıları bağlanır (inaktivasiya).</li>
+                    <li><strong>K⁺ kanalları açılır:</strong> Kalium sürətlə çölə axır və hüceyrəni yenidən mənfiləşdirir.</li>
+                </ul>
+            </div>
+
+            <button class="accordion">4. Hiperpolyarizasiya (Undershoot)</button>
+            <div class="panel">
+                <ul>
+                    <li>K⁺ kanalları bir az gec bağlanır.</li>
+                    <li>Potensial qısa müddətə sükunət səviyyəsindən (-70 mV) də aşağı düşür, sonra normaya qayıdır.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="rules" class="content-card">
+            <h2><i class="fas fa-traffic-light"></i> IV. Qaydalar və Sürət</h2>
+            <h3>📜 Qızıl Qaydalar:</h3>
+            <ul>
+                <li><strong>"Ya Hep, Ya Hiç":</strong> Eşik dəyərə çatdınsa, AP mütləq yaranacaq. Çatmadınsa, heç nə olmayacaq.</li>
+                <li><strong>Şiddət Kodlaması:</strong> Beyin ağrının şiddətini AP-nin böyüklüyü ilə yox, impulsların <strong>tezliyi (sıklığı)</strong> ilə anlayır.</li>
+            </ul>
+
+            <h3>🚦 Refrakter Dövr (Yenidən Oyanma):</h3>
+            <p>Hüceyrənin "istirahət" etdiyi və yeni siqnala cavab vermədiyi dövrdür. İletinin tək yönlü olmasını təmin edir.</p>
+
+            <h3>🚀 İletim Sürəti və Miyelin:</h3>
+            <p>İmpulsun sürətli getməsi üçün akson qalın olmalı və ya miyelin qişası olmalıdır.</p>
+            
+             <div class="image-placeholder" style="height: 180px;">
+                <i class="fas fa-forward"></i>
+                <span>Şəkil: Saltator (Sıçrayıcı) İletim</span>
+            </div>
+            <ul>
+                <li><strong>Saltator İletim:</strong> Miyelinli liflərdə impuls sadəcə <strong>Ranvier Buğumlarında</strong> yaranaraq "tullanır". Bu, sürəti inanılmaz artırır.</li>
+            </ul>
+        </section>
+
+        <section id="clinic" class="content-card" style="border-left: 5px solid #d9534f;">
+            <h2><i class="fas fa-user-md"></i> V. Klinik Əlaqə: Dağınıq Skleroz (MS)</h2>
+            <p>Nəzəriyyəni həyatla birləşdirək.</p>
+            <ul>
+                <li><strong>Nədir?</strong> İmmunitet sistemi səhvən MSS-dəki miyelin qişasını zədələyir. İzolyasiya pozulduğu üçün "naqillər" qısaqapanma verir.</li>
+                <li><strong>Simptomlar:</strong> Görmə bulanıqlığı, əzələ zəifliyi, koordinasiya itkisi.</li>
+                <li><strong>Müalicə:</strong> Tam sağalmır, amma İnterferonlar kimi dərmanlarla gedişat yavaşladılır.</li>
+            </ul>
+        </section>
+
+        <section id="quiz-section" class="content-card">
+            <h2><i class="fas fa-question-circle"></i> 🧠 Özünü Yoxla! (Quiz)</h2>
+            <p>Mövzunu nə qədər anladığını yoxla.</p>
+
+            <div class="quiz-question" id="q1">
+                <p><strong>Sual 1:</strong> Sükunət halında hüceyrə membranı hansı iona daha çox keçiricidir?</p>
+                <div class="quiz-options">
+                    <button onclick="checkAnswer('q1', 'a')">A) Natrium (Na⁺)</button>
+                    <button onclick="checkAnswer('q1', 'b')">B) Kalium (K⁺)</button>
+                    <button onclick="checkAnswer('q1', 'c')">C) Xlor (Cl⁻)</button>
+                </div>
+                <p class="quiz-feedback"></p>
+            </div>
+
+            <div class="quiz-question" id="q2">
+                <p><strong>Sual 2:</strong> Depolyarizasiya fazasında hüceyrə içinə sürətlə axan ion hansıdır?</p>
+                <div class="quiz-options">
+                    <button onclick="checkAnswer('q2', 'a')">A) K⁺</button>
+                    <button onclick="checkAnswer('q2', 'b')">B) Cl⁻</button>
+                    <button onclick="checkAnswer('q2', 'c')">C) Na⁺</button>
+                </div>
+                <p class="quiz-feedback"></p>
+            </div>
+
+             <div class="quiz-question" id="q3">
+                <p><strong>Sual 3:</strong> Beyin uyaranın şiddətini necə kodlayır?</p>
+                <div class="quiz-options">
+                    <button onclick="checkAnswer('q3', 'a')">A) Aksiya Potensialının böyüklüyü ilə</button>
+                    <button onclick="checkAnswer('q3', 'b')">B) İmpulsların tezliyi (sıklığı) ilə</button>
+                    <button onclick="checkAnswer('q3', 'c')">C) Aksonun qalınlığı ilə</button>
+                </div>
+                <p class="quiz-feedback"></p>
+            </div>
+        </section>
+
+        <section id="flashcards-section" class="content-card">
+            <h2><i class="fas fa-clone"></i> 📝 Öyrənmə Kartları (Flashcards)</h2>
+            <p>Cavabı görmək üçün kartın üzərinə klikləyin.</p>
+
+            <div class="flashcard-container">
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <i class="fas fa-sync-alt"></i>
+                            <h3>Na⁺/K⁺ Pompası nə iş görür?</h3>
+                        </div>
+                        <div class="flashcard-back">
+                            <p>Enerji (ATP) xərcləyərək <strong>3 Na⁺ ÇÖLƏ, 2 K⁺ İÇƏRİ</strong> vurur. İon balansını qoruyur.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <i class="fas fa-arrow-down"></i>
+                            <h3>Repolyarizasiya nədir?</h3>
+                        </div>
+                        <div class="flashcard-back">
+                            <p>Hüceyrənin yenidən mənfi yüklənməsi fazasıdır. Bu zaman <strong>K⁺ (Kalium)</strong> kanalları açılır və K⁺ çölə çıxır.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                    <div class="flashcard-inner">
+                        <div class="flashcard-front">
+                            <i class="fas fa-frog"></i>
+                            <h3>Saltator İletim nədir?</h3>
+                        </div>
+                        <div class="flashcard-back">
+                            <p>İmpulsun miyelinli liflərdə sadəcə <strong>Ranvier Buğumlarından</strong> "sıçrayaraq" çox sürətli getməsidir.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div> <footer>
+        <p>Təbriklər! Fiziologiyanın əlifbasını öyrəndiniz. Növbəti mərhələyə hazırsınız?</p>
+        <a href="#" class="next-lesson-btn">Növbəti Dərs: Sinaptik İletim <i class="fas fa-arrow-right"></i></a>
+    </footer>
+
+
+    <script>
+        // --- 1. Akkordeon Funksionallığı ---
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].addEventListener("click", function() {
+                // Aktiv sinifini dəyişdir (ikonu dəyişmək üçün)
+                this.classList.toggle("active-acc");
+                
+                // Paneli tap və aç/bağla
+                var panel = this.nextElementSibling;
+                if (panel.style.maxHeight) {
+                    panel.style.maxHeight = null;
+                    panel.classList.remove("show");
+                } else {
+                    panel.classList.add("show");
+                    panel.style.maxHeight = panel.scrollHeight + "px";
+                }
+            });
+        }
+
+        // --- 2. Kviz Məntiq ---
+        // Düzgün cavabların siyahısı
+        const correctAnswers = {
+            'q1': 'b', // K+ keçiricidir
+            'q2': 'c', // Na+ içəri axır
+            'q3': 'b'  // Tezlik ilə kodlanır
+        };
+
+        function checkAnswer(questionId, selectedOption) {
+            const questionBlock = document.getElementById(questionId);
+            const feedbackText = questionBlock.querySelector('.quiz-feedback');
+            const buttons = questionBlock.querySelectorAll('.quiz-options button');
+            
+            // Həmin sualın bütün düymələrini deaktiv et ki, təkrar basa bilməsinlər
+            buttons.forEach(btn => {
+                btn.disabled = true;
+                // Seçilməmiş düymələri bozart
+                if (btn.getAttribute('onclick').indexOf(selectedOption) === -1) {
+                    btn.style.opacity = '0.6';
+                }
+            });
+
+            // Cavabı yoxla
+            if (selectedOption === correctAnswers[questionId]) {
+                // Düzdürsə
+                event.target.classList.add('correct');
+                feedbackText.textContent = "✅ Afərin! Cavab düzgündür.";
+                feedbackText.style.color = "var(--correct-color)";
+            } else {
+                // Səhvdirsə
+                event.target.classList.add('wrong');
+                feedbackText.textContent = "❌ Təəssüf ki, səhvdir. Yenidən oxuyun.";
+                feedbackText.style.color = "var(--wrong-color)";
+                
+                // Düzgün cavabı göstər (optional)
+                 buttons.forEach(btn => {
+                     if(btn.getAttribute('onclick').indexOf(correctAnswers[questionId]) !== -1) {
+                         btn.classList.add('correct');
+                     }
+                 });
+            }
+        }
+
+        // --- 3. Flaşkartlar üçün JS lazım deyil, CSS-dəki 'onclick' kifayətdir ---
+    </script>
+
+</body>
+</html>
